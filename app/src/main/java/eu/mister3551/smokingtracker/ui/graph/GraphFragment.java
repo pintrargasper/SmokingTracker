@@ -1,0 +1,250 @@
+package eu.mister3551.smokingtracker.ui.graph;
+
+import android.database.Cursor;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
+import eu.mister3551.smokingtracker.R;
+import eu.mister3551.smokingtracker.Utils;
+import eu.mister3551.smokingtracker.database.Manager;
+import eu.mister3551.smokingtracker.databinding.FragmentGraphBinding;
+import eu.mister3551.smokingtracker.record.DataPoint;
+import eu.mister3551.smokingtracker.record.Settings;
+import eu.mister3551.smokingtracker.ui.graph.view.GraphView;
+
+public class GraphFragment extends Fragment implements GraphInterface {
+
+    private FragmentGraphBinding binding;
+    private Manager manager;
+    private LocalDate weeklyDate;
+    private LocalDate monthlyDate;
+    private LocalDate yearlyDate;
+    private PopupWindow popupWindow;
+    private TextView popupTextView;
+
+    private TextView text_view_current_date_text_weekly;
+    private TextView text_view_current_date_text_monthly;
+    private TextView text_view_current_date_text_yearly;
+
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+
+        binding = FragmentGraphBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+        manager = Utils.getManager().get();
+
+        text_view_current_date_text_weekly = root.findViewById(R.id.text_view_current_date_text_weekly);
+        text_view_current_date_text_monthly = root.findViewById(R.id.text_view_current_date_text_monthly);
+        text_view_current_date_text_yearly = root.findViewById(R.id.text_view_current_date_text_yearly);
+        ImageButton image_button_previous_day_weekly = root.findViewById(R.id.image_button_previous_day_weekly);
+        ImageButton image_button_next_day_weekly = root.findViewById(R.id.image_button_next_day_weekly);
+        ImageButton image_button_previous_day_monthly = root.findViewById(R.id.image_button_previous_day_monthly);
+        ImageButton image_button_next_day_monthly = root.findViewById(R.id.image_button_next_day_monthly);
+        ImageButton image_button_previous_day_yearly = root.findViewById(R.id.image_button_previous_day_yearly);
+        ImageButton image_button_next_day_yearly = root.findViewById(R.id.image_button_next_day_yearly);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDate now = LocalDate.now();
+            weeklyDate = now;
+            monthlyDate = now;
+            yearlyDate = now;
+        }
+
+        image_button_previous_day_weekly.setOnClickListener(view -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                weeklyDate = weeklyDate.minusWeeks(1);
+            }
+            showData();
+        });
+
+        image_button_next_day_weekly.setOnClickListener(view -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                weeklyDate = weeklyDate.plusWeeks(1);
+            }
+            showData();
+        });
+
+        image_button_previous_day_monthly.setOnClickListener(view -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                monthlyDate = monthlyDate.minusMonths(1);
+            }
+            showData();
+        });
+
+        image_button_next_day_monthly.setOnClickListener(view -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                monthlyDate = monthlyDate.plusMonths(1);
+            }
+            showData();
+        });
+
+        image_button_previous_day_yearly.setOnClickListener(view -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                yearlyDate = yearlyDate.minusYears(1);
+            }
+            showData();
+        });
+
+        image_button_next_day_yearly.setOnClickListener(view -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                yearlyDate = yearlyDate.plusYears(1);
+            }
+            showData();
+        });
+
+        showData();
+        return root;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    @Override
+    public void onPointClick(DataPoint dataPoint) {
+        //showPopup(dataPoint.getValue());
+    }
+
+    private void showData() {
+        if (Utils.getSettings() == null) {
+            return;
+        }
+
+        showGraph(binding.getRoot(), getWeekData(weeklyDate), GraphView.DateTypes.WEEKLY);
+        showGraph(binding.getRoot(), getMonthData(monthlyDate), GraphView.DateTypes.MONTHLY);
+        showGraph(binding.getRoot(), getYearData(yearlyDate), GraphView.DateTypes.YEARLY);
+    }
+
+    private List<DataPoint> getWeekData(LocalDate localDate) {
+        List<DataPoint> dataPoints = new ArrayList<>();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate startOfWeek = localDate.with(DayOfWeek.MONDAY);
+            LocalDate endOfWeek = localDate.with(DayOfWeek.SUNDAY);
+
+            String weekName = startOfWeek.format(DateTimeFormatter.ofPattern("dd.MM")) + "/" + endOfWeek.format(DateTimeFormatter.ofPattern("dd.MM")) + " " + localDate.getYear();
+            text_view_current_date_text_weekly.setText(weekName);
+
+            Cursor cursor = manager.fetchByWeek(startOfWeek.format(formatter), endOfWeek.format(formatter));
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    dataPoints.add(new DataPoint(
+                            cursor.getString(cursor.getColumnIndexOrThrow("date")),
+                            cursor.getFloat(cursor.getColumnIndexOrThrow("value"))
+                    ));
+                } while (cursor.moveToNext());
+                cursor.close();
+            }
+        }
+        return dataPoints;
+    }
+
+    private List<DataPoint> getMonthData(LocalDate date) {
+        List<DataPoint> dataPoints = new ArrayList<>();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDate startDateOfMonth = date.withDayOfMonth(1);
+            LocalDate endDateOfMonth = date.withDayOfMonth(date.lengthOfMonth());
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+            String monthName = GraphView.getMonth(getContext(), date.toString()) + " " + date.getYear();
+            text_view_current_date_text_monthly.setText(monthName);
+
+            Cursor cursor = manager.fetchByMonth(startDateOfMonth.format(dateTimeFormatter), endDateOfMonth.format(dateTimeFormatter));
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String[] dateParts = cursor.getString(cursor.getColumnIndexOrThrow("date")).split("-");
+                    float value = cursor.getFloat(cursor.getColumnIndexOrThrow("value"));
+                    dataPoints.add(new DataPoint(dateParts[2] + "." + dateParts[1], value));
+                } while (cursor.moveToNext());
+                cursor.close();
+            }
+        }
+        return dataPoints;
+    }
+
+    private List<DataPoint> getYearData(LocalDate date) {
+        List<DataPoint> dataPoints = new ArrayList<>();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDate startOfYear = date.withDayOfYear(1);
+            LocalDate endOfYear = date.withDayOfYear(date.lengthOfYear());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+            text_view_current_date_text_yearly.setText(String.valueOf(date.getYear()));
+
+            Cursor cursor = manager.fetchByYear(startOfYear.format(formatter), endOfYear.format(formatter));
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String dateString = cursor.getString(cursor.getColumnIndexOrThrow("date"));
+                    float value = cursor.getFloat(cursor.getColumnIndexOrThrow("value"));
+                    dataPoints.add(new DataPoint(dateString, value));
+                } while (cursor.moveToNext());
+                cursor.close();
+            }
+        }
+        return dataPoints;
+    }
+
+    private void showGraph(View view, List<DataPoint> dataPointList, GraphView.DateTypes dateType) {
+        if (Utils.getSettings() == null) {
+            return;
+        }
+
+        GraphView graphView = null;
+        switch (dateType) {
+            case WEEKLY -> graphView = view.findViewById(R.id.graph_view_weekly);
+            case MONTHLY -> graphView = view.findViewById(R.id.graph_view_monthly);
+            case YEARLY ->  graphView = view.findViewById(R.id.graph_view_yearly);
+        }
+
+        if (graphView != null) {
+            graphView.setDataPoints(dataPointList);
+            graphView.setColor(Utils.getSettings().getGraph().getColor());
+            graphView.setPointColor(Utils.settings.getGraph().getPointColors());
+            graphView.setLineColor(Utils.getSettings().getGraph().getLineColors());
+            graphView.setPaintStyle(Utils.getSettings().getGraph().getPaintStyle());
+            graphView.setDateType(dateType);
+            graphView.clickable(this);
+            graphView.show();
+        }
+    }
+
+    /*private void showPopup(float value) {
+        if (getContext() == null) {
+            return;
+        }
+        View popupView = getLayoutInflater().inflate(R.layout.fragment_graph_popup, null);
+        popupTextView = popupView.findViewById(R.id.popup_text_view);
+        popupTextView.setText(String.valueOf(value));
+
+        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(true);
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+    }*/
+}

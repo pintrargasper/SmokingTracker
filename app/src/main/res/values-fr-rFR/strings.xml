@@ -1,0 +1,89 @@
+<resources>
+    <string name="app_name">Smoking tracker</string>
+    <string name="title_home">Accueil</string>
+    <string name="title_graph">Graphique</string>
+    <string name="title_notifications">Paramètres</string>
+
+    <!-- fragment_dashboard -->
+    <string name="text_view_timer">00:00:00</string>
+    <string name="text_view_message">Temps écoulé depuis la dernière cigarette</string>
+    <string name="text_view_daily">Quotidien</string>
+    <string name="text_view_daily_value">0</string>
+    <string name="text_view_weekly">Hebdomadaire</string>
+    <string name="text_view_weekly_value">0</string>
+    <string name="text_view_monthly">Mensuel</string>
+    <string name="text_view_monthly_value">0</string>
+    <string name="text_view_yearly">Annuel</string>
+    <string name="image_button_previous_day_description">Jour précédent</string>
+    <string name="text_view_current_date_text_dd_mm_yyyy">DD.MM.YYYY</string>
+    <string name="image_button_next_day_description">Jour suivant</string>
+    <string name="image_button_new_entry_content_description">Nouvelle entrée</string>
+    <string name="text_view_new_entry">Appuyez pour ajouter une cigarette</string>
+
+    <!--fragment_dashboard_table -->
+    <string name="text_view_full_date_text">DD.MM.YYYY HH:SS</string>
+    <string name="image_button_edit_description">Modifier l\'enregistrement</string>
+    <string name="delete_record_description">Supprimer l\'enregistrement</string>
+
+    <!--fragment_dashboard_popup -->
+    <string name="text_view_message_text">Êtes-vous sûr de vouloir supprimer cet enregistrement ?</string>
+    <string name="text_view_message_text_1">Date et heure</string>
+    <string name="button_confirm">Confirmer</string>
+    <string name="button_close">Fermer</string>
+
+    <!--fragment_graph_view -->
+    <string name="str_monday">Lun</string>
+    <string name="str_tuesday">Mar</string>
+    <string name="str_wednesday">Mer</string>
+    <string name="str_thursday">Jeu</string>
+    <string name="str_friday">Ven</string>
+    <string name="str_saturday">Sam</string>
+    <string name="str_sunday">Dim</string>
+
+    <string name="str_january">Jan</string>
+    <string name="str_february">Fév</string>
+    <string name="str_march">Mar</string>
+    <string name="str_april">Avr</string>
+    <string name="str_may">Mai</string>
+    <string name="str_june">Juin</string>
+    <string name="str_july">Juil</string>
+    <string name="str_august">Aoû</string>
+    <string name="str_september">Sep</string>
+    <string name="str_october">Oct</string>
+    <string name="str_november">Nov</string>
+    <string name="str_december">Déc</string>
+
+    <!--fragment_settings -->
+    <string name="text_view_basic">Base</string>
+    <string name="text_view_language">Langue</string>
+    <string name="button_language_select">Sélectionner</string>
+    <string name="text_view_graph">Graphique</string>
+    <string name="text_view_color">Couleur</string>
+    <string name="button_color_select">Sélectionner</string>
+    <string name="text_view_point_color">Couleur du point</string>
+    <string name="button_point_color_select">Sélectionner</string>
+    <string name="text_view_line_color">Couleur de la ligne</string>
+    <string name="button_line_color_select">Sélectionner</string>
+    <string name="text_view_paint_style">Style de peinture</string>
+    <string name="text_view_about">À propos de</string>
+    <string name="text_view_version">Version</string>
+    <string name="button_save">Sauvegarder</string>
+
+    <!--fragment_settings_popup_colors -->
+    <string name="color_blue">Bleu</string>
+    <string name="color_gray">Gris</string>
+    <string name="color_red">Rouge</string>
+    <string name="color_yellow">Jaune</string>
+
+    <!--fragment_settings_popup_paint_style -->
+    <string name="text_view_fill">Remplir</string>
+    <string name="text_view_stroke">Trait</string>
+    <string name="text_view_fill_and_stroke">Remplir et trait</string>
+
+    <string-array name="language_array">
+        <item>Slovenščina</item>
+        <item>English</item>
+        <item>Deutsch</item>
+        <item>Français</item>
+    </string-array>
+</resources>

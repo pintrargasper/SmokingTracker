@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/record"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingTop="16dp">
+
+    <TextView
+        android:id="@+id/text_view_full_date_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/text_view_full_date_text"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:ellipsize="end"/>
+
+    <ImageButton
+        android:id="@+id/image_button_edit"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:contentDescription="@string/image_button_edit_description"
+        android:src="@drawable/baseline_edit_40"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_marginStart="8dp"/>
+
+    <ImageButton
+        android:id="@+id/image_button_delete"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:contentDescription="@string/delete_record_description"
+        android:src="@drawable/baseline_delete_40"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"/>
+</LinearLayout>
