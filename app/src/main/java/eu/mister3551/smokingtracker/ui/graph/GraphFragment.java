@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import eu.mister3551.smokingtracker.R;
 import eu.mister3551.smokingtracker.Utils;
@@ -36,9 +37,9 @@ public class GraphFragment extends Fragment implements GraphInterface {
     private LocalDate weeklyDate;
     private LocalDate monthlyDate;
     private LocalDate yearlyDate;
-    private PopupWindow popupWindow;
-    private TextView popupTextView;
-
+    private TextView text_view_graph_view_weekly;
+    private TextView text_view_graph_view_monthly;
+    private TextView text_view_graph_view_yearly;
     private TextView text_view_current_date_text_weekly;
     private TextView text_view_current_date_text_monthly;
     private TextView text_view_current_date_text_yearly;
@@ -51,6 +52,9 @@ public class GraphFragment extends Fragment implements GraphInterface {
 
         manager = Utils.getManager().get();
 
+        text_view_graph_view_weekly = root.findViewById(R.id.text_view_graph_view_weekly);
+        text_view_graph_view_monthly = root.findViewById(R.id.text_view_graph_view_monthly);
+        text_view_graph_view_yearly = root.findViewById(R.id.text_view_graph_view_yearly);
         text_view_current_date_text_weekly = root.findViewById(R.id.text_view_current_date_text_weekly);
         text_view_current_date_text_monthly = root.findViewById(R.id.text_view_current_date_text_monthly);
         text_view_current_date_text_yearly = root.findViewById(R.id.text_view_current_date_text_yearly);
@@ -130,9 +134,26 @@ public class GraphFragment extends Fragment implements GraphInterface {
             return;
         }
 
-        showGraph(binding.getRoot(), getWeekData(weeklyDate), GraphView.DateTypes.WEEKLY);
-        showGraph(binding.getRoot(), getMonthData(monthlyDate), GraphView.DateTypes.MONTHLY);
-        showGraph(binding.getRoot(), getYearData(yearlyDate), GraphView.DateTypes.YEARLY);
+        updateTextViewAndGraph(
+                getWeekData(weeklyDate),
+                R.string.text_view_weekly,
+                text_view_graph_view_weekly,
+                GraphView.DateTypes.WEEKLY
+        );
+
+        updateTextViewAndGraph(
+                getMonthData(monthlyDate),
+                R.string.text_view_monthly,
+                text_view_graph_view_monthly,
+                GraphView.DateTypes.MONTHLY
+        );
+
+        updateTextViewAndGraph(
+                getYearData(yearlyDate),
+                R.string.text_view_yearly,
+                text_view_graph_view_yearly,
+                GraphView.DateTypes.YEARLY
+        );
     }
 
     private List<DataPoint> getWeekData(LocalDate localDate) {
@@ -232,6 +253,13 @@ public class GraphFragment extends Fragment implements GraphInterface {
             graphView.clickable(this);
             graphView.show();
         }
+    }
+
+    private void updateTextViewAndGraph(List<DataPoint> data, int stringResId, TextView textView, GraphView.DateTypes dateType) {
+        float value = data.stream().map(DataPoint::value).reduce(0f, Float::sum);
+        String text = String.format(Locale.getDefault(), "%s (%d)", getString(stringResId), (int) value);
+        textView.setText(text);
+        showGraph(binding.getRoot(), data, dateType);
     }
 
     /*private void showPopup(float value) {

@@ -133,7 +133,7 @@ public class GraphView extends View {
     private void drawXAxisLabels(Canvas canvas, int width, int height) {
         float totalWidth = width - 200;
         float stepX = dataPoints.size() > 1 ? totalWidth / (dataPoints.size() - 1) : totalWidth;
-        int step = dataPoints.size() > 12 ? dataPoints.size() / 12 : 1;
+        int step = dataPoints.size() > 12 ? 2 : 1;
         for (int i = 0; i < dataPoints.size(); i += step) {
             float x = 140 + i * stepX;
             String label = getLabelForDate(dataPoints.get(i).date());

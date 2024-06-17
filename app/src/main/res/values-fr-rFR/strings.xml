@@ -6,6 +6,8 @@
 
     <!-- fragment_dashboard -->
     <string name="text_view_timer">00:00:00</string>
+    <string name="text_day_1">jour</string>
+    <string name="text_day_2">jours</string>
     <string name="text_view_message">Temps écoulé depuis la dernière cigarette</string>
     <string name="text_view_daily">Quotidien</string>
     <string name="text_view_daily_value">0</string>
@@ -58,6 +60,7 @@
     <string name="text_view_language">Langue</string>
     <string name="button_language_select">Sélectionner</string>
     <string name="text_view_graph">Graphique</string>
+    <string name="text_view_graph_color">Couleur du graphique</string>
     <string name="text_view_color">Couleur</string>
     <string name="button_color_select">Sélectionner</string>
     <string name="text_view_point_color">Couleur du point</string>

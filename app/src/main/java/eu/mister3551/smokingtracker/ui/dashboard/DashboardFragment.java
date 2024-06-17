@@ -170,7 +170,12 @@ public class DashboardFragment extends Fragment implements HistoryInterface {
     private String formattedDate(Long timePassed) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Duration duration = Duration.ofSeconds(timePassed);
-            return String.format(Locale.getDefault(),"%02d:%02d:%02d", duration.toHours(), duration.toMinutes() % 60, duration.getSeconds() % 60);
+
+            String dayString = duration.toDays() == 1 ? getString(R.string.text_day_1) : getString(R.string.text_day_2);
+
+            return duration.toDays() > 0
+                    ? String.format(Locale.getDefault(), "%d " + dayString + " %02d:%02d:%02d", duration.toDays(), duration.toHours() % 24, duration.toMinutes() % 60, duration.getSeconds() % 60)
+                    : String.format(Locale.getDefault(), "%02d:%02d:%02d", duration.toHours(), duration.toMinutes() % 60, duration.getSeconds() % 60);
         }
         return "00:00:00";
     }

@@ -16,6 +16,7 @@
             android:id="@+id/text_view_settings_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/text_view_point_color"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:paddingBottom="10dp"

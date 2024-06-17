@@ -6,6 +6,8 @@
 
     <!-- fragment_dashboard -->
     <string name="text_view_timer">00:00:00</string>
+    <string name="text_day_1">day</string>
+    <string name="text_day_2">days</string>
     <string name="text_view_message">Time passed after last cigarette</string>
     <string name="text_view_daily">Daily</string>
     <string name="text_view_daily_value">0</string>
@@ -58,6 +60,7 @@
     <string name="text_view_language">Language</string>
     <string name="button_language_select">Select</string>
     <string name="text_view_graph">Graph</string>
+    <string name="text_view_graph_color">Graph color</string>
     <string name="text_view_color">Color</string>
     <string name="button_color_select">Select</string>
     <string name="text_view_point_color">Point color</string>

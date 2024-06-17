@@ -76,7 +76,7 @@ public class SettingsFragment extends Fragment {
         switch (title) {
             case "Language" -> showLanguagePopup(context);
             case "Graph color", "Line color", "Point color" -> showColorPopup(context, title);
-            case "Paint style" -> showPaintStylePopup(context, title);
+            case "Paint style" -> showPaintStylePopup(context);
         }
     }
 
@@ -114,7 +114,9 @@ public class SettingsFragment extends Fragment {
         bottomSheetDialog.setContentView(bottomSheetView);
 
         TextView textViewSettingsMessage = bottomSheetView.findViewById(R.id.text_view_settings_message);
-        textViewSettingsMessage.setText(title);
+
+        String titleString = title.equals("Graph color") ? getString(R.string.text_view_graph_color) : title.equals("Point color") ? getString(R.string.text_view_point_color) : getString(R.string.text_view_line_color);
+        textViewSettingsMessage.setText(titleString);
 
         Map<Integer, CheckBox> colorCheckBoxMap = initializeColorCheckBoxMap(bottomSheetView);
 
@@ -132,13 +134,10 @@ public class SettingsFragment extends Fragment {
         bottomSheetDialog.show();
     }
 
-    private void showPaintStylePopup(Context context, String title) {
+    private void showPaintStylePopup(Context context) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
         View bottomSheetView = getLayoutInflater().inflate(R.layout.fragment_settings_popup_paint_style, null);
         bottomSheetDialog.setContentView(bottomSheetView);
-
-        TextView textViewSettingsMessage = bottomSheetView.findViewById(R.id.text_view_settings_message);
-        textViewSettingsMessage.setText(title);
 
         Map<Paint.Style, CheckBox> paintStyleCheckBoxMap = initializePaintStyleCheckBoxMap(bottomSheetView);
 

@@ -6,6 +6,8 @@
 
     <!-- fragment_dashboard -->
     <string name="text_view_timer">00:00:00</string>
+    <string name="text_day_1">dan</string>
+    <string name="text_day_2">dni</string>
     <string name="text_view_message">Čas od zadnje cigarete</string>
     <string name="text_view_daily">Dnevno</string>
     <string name="text_view_daily_value">0</string>
@@ -58,6 +60,7 @@
     <string name="text_view_language">Jezik</string>
     <string name="button_language_select">Izberi</string>
     <string name="text_view_graph">Graf</string>
+    <string name="text_view_graph_color">Barva grafa</string>
     <string name="text_view_color">Barva</string>
     <string name="button_color_select">Izberi</string>
     <string name="text_view_point_color">Barva točke</string>
