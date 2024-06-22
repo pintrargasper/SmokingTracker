@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class Database extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "smoking_tracker_1";
+    private static final String DATABASE_NAME = "smoking_tracker";
     private static final int DATABASE_VERSION = 1;
     public static final String MAIN_TABLE = "main";
     public static final String HISTORY_TABLE = "history";
@@ -28,10 +28,10 @@ public class Database extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        database.execSQL(Queries.dropMain);
-        database.execSQL(Queries.dropHistory);
-        database.execSQL(Queries.dropSettings);
-        database.execSQL(Queries.dropGraph);
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        sqLiteDatabase.execSQL(Queries.dropMain);
+        sqLiteDatabase.execSQL(Queries.dropHistory);
+        sqLiteDatabase.execSQL(Queries.dropSettings);
+        sqLiteDatabase.execSQL(Queries.dropGraph);
     }
 }

@@ -24,12 +24,14 @@
 
     <!--fragment_dashboard_table -->
     <string name="text_view_full_date_text">DD.MM.YYYY HH:SS</string>
+    <string name="image_button_is_lent">Est prêté?</string>
     <string name="image_button_edit_description">Modifier l\'enregistrement</string>
     <string name="delete_record_description">Supprimer l\'enregistrement</string>
 
     <!--fragment_dashboard_popup -->
     <string name="text_view_message_text">Êtes-vous sûr de vouloir supprimer cet enregistrement ?</string>
     <string name="text_view_message_text_1">Date et heure</string>
+    <string name="text_view_given_cigarette">Cette cigarette a-t-elle été prêtée?</string>
     <string name="button_confirm">Confirmer</string>
     <string name="button_close">Fermer</string>
 

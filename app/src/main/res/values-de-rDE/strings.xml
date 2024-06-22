@@ -24,12 +24,14 @@
 
     <!--fragment_dashboard_table -->
     <string name="text_view_full_date_text">DD.MM.YYYY HH:SS</string>
+    <string name="image_button_is_lent">Ist verliehen?</string>
     <string name="image_button_edit_description">Eintrag bearbeiten</string>
     <string name="delete_record_description">Eintrag löschen</string>
 
     <!--fragment_dashboard_popup -->
     <string name="text_view_message_text">Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?</string>
     <string name="text_view_message_text_1">Datum und Uhrzeit</string>
+    <string name="text_view_given_cigarette">Wurde diese Zigarette geliehen?</string>
     <string name="button_confirm">Bestätigen</string>
     <string name="button_close">Schließen</string>
 

@@ -2,18 +2,23 @@ package eu.mister3551.smokingtracker.ui.dashboard;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -33,6 +38,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import eu.mister3551.smokingtracker.R;
 import eu.mister3551.smokingtracker.Utils;
@@ -45,7 +51,6 @@ import eu.mister3551.smokingtracker.record.History;
 public class DashboardFragment extends Fragment implements HistoryInterface {
 
     private FragmentDashboardBinding binding;
-    private HistoryAdapter historyAdapter;
     private RecyclerView recyclerView;
     private Manager manager;
     private TextView text_view_timer_text;
@@ -66,7 +71,6 @@ public class DashboardFragment extends Fragment implements HistoryInterface {
         View root = binding.getRoot();
 
         manager = Utils.getManager().get();
-
         handler = new Handler();
 
         recyclerView = root.findViewById(R.id.recyclerview_history);
@@ -93,7 +97,6 @@ public class DashboardFragment extends Fragment implements HistoryInterface {
             currentDate = currentFinalDate;
         }
         updateData(currentDate);
-
         return root;
     }
 
@@ -106,7 +109,7 @@ public class DashboardFragment extends Fragment implements HistoryInterface {
 
     @Override
     public void onItemClick(Context context, int position) {
-
+        //Toast.makeText(context, "Pozicija" + position, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -149,7 +152,7 @@ public class DashboardFragment extends Fragment implements HistoryInterface {
 
     private void showHistory(String currentDate) {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        historyAdapter = new HistoryAdapter(requireContext(), getHistoryList(currentDate), this);
+        HistoryAdapter historyAdapter = new HistoryAdapter(requireContext(), getHistoryList(currentDate), this);
         recyclerView.setAdapter(historyAdapter);
     }
 
@@ -160,7 +163,8 @@ public class DashboardFragment extends Fragment implements HistoryInterface {
             do {
                 Long id = cursor.getLong(cursor.getColumnIndexOrThrow("id_" + Database.HISTORY_TABLE));
                 String createdAt = cursor.getString(cursor.getColumnIndexOrThrow("created_at"));
-                historyList.add(new History(id, createdAt));
+                int isLent = cursor.getInt(cursor.getColumnIndexOrThrow("is_lent"));
+                historyList.add(new History(id, createdAt, isLent == 1));
             } while (cursor.moveToNext());
             cursor.close();
         }
@@ -242,8 +246,10 @@ public class DashboardFragment extends Fragment implements HistoryInterface {
         bottomSheetDialog.setContentView(bottomSheetView);
 
         HorizontalScrollView horizontal_scroll_view = bottomSheetView.findViewById(R.id.horizontal_scroll_view);
+        LinearLayout linear_layout_given_cigarette = bottomSheetView.findViewById(R.id.linear_layout_given_cigarette);
         DatePicker date_picker = bottomSheetView.findViewById(R.id.date_picker);
         TimePicker time_picker = bottomSheetView.findViewById(R.id.time_picker);
+        CheckBox check_box_given_cigarette = bottomSheetView.findViewById(R.id.check_box_given_cigarette);
         TextView text_view_message = bottomSheetView.findViewById(R.id.text_view_message);
         Button button_confirm = bottomSheetView.findViewById(R.id.button_confirm);
         Button button_close = bottomSheetView.findViewById(R.id.button_close);
@@ -252,13 +258,17 @@ public class DashboardFragment extends Fragment implements HistoryInterface {
             text_view_message.setText(R.string.text_view_message_text_1);
             time_picker.setIs24HourView(true);
 
-            Calendar calendar = splitDate(id);
+            Pair<Calendar, Boolean> pair = fetchById(id);
+            Calendar calendar = pair.first;
 
             date_picker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
             time_picker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
             time_picker.setMinute(calendar.get(Calendar.MINUTE));
 
+            check_box_given_cigarette.setChecked(pair.second);
+
             horizontal_scroll_view.setVisibility(View.VISIBLE);
+            linear_layout_given_cigarette.setVisibility(View.VISIBLE);
         }
 
         button_confirm.setOnClickListener(view -> {
@@ -266,7 +276,9 @@ public class DashboardFragment extends Fragment implements HistoryInterface {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(date_picker.getYear(), date_picker.getMonth(), date_picker.getDayOfMonth(), time_picker.getHour(), time_picker.getMinute());
                 String datetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(calendar.getTime());
-                manager.update(id, datetime);
+
+                int isLent = check_box_given_cigarette.isChecked() ? 1 : 0;
+                manager.update(id, isLent, datetime);
             } else {
                 manager.delete(id);
             }
@@ -277,13 +289,15 @@ public class DashboardFragment extends Fragment implements HistoryInterface {
         bottomSheetDialog.show();
     }
 
-    private Calendar splitDate(Long id) {
+    private Pair<Calendar, Boolean> fetchById(Long id) {
         Cursor cursor = manager.fetchById(id);
 
         String createdAt = null;
+        int isLent = 0;
         if (cursor.moveToFirst()) {
             do {
                 createdAt = cursor.getString(cursor.getColumnIndexOrThrow("created_at"));
+                isLent = cursor.getInt(cursor.getColumnIndexOrThrow("is_lent"));
             } while (cursor.moveToNext());
             cursor.close();
         }
@@ -298,6 +312,7 @@ public class DashboardFragment extends Fragment implements HistoryInterface {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(dateTime);
-        return calendar;
+
+        return new Pair<>(calendar, isLent == 1);
     }
 }

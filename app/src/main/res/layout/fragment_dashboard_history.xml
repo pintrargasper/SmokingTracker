@@ -20,6 +20,16 @@
         android:ellipsize="end"/>
 
     <ImageButton
+        android:id="@+id/image_button_is_lent"
+        android:layout_width="48dp"
+        android:layout_height="28dp"
+        android:contentDescription="@string/image_button_is_lent"
+        android:src="@drawable/baseline_person_40"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_marginStart="8dp"
+        android:visibility="gone"/>
+
+    <ImageButton
         android:id="@+id/image_button_edit"
         android:layout_width="48dp"
         android:layout_height="48dp"

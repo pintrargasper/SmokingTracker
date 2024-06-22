@@ -24,12 +24,14 @@
 
     <!--fragment_dashboard_table -->
     <string name="text_view_full_date_text">DD.MM.YYYY HH:SS</string>
+    <string name="image_button_is_lent">Je sposojena?</string>
     <string name="image_button_edit_description">Uredi zapis</string>
     <string name="delete_record_description">Izbriši zapis</string>
 
     <!--fragment_dashboard_popup -->
     <string name="text_view_message_text">Ali ste prepričani, da želite izbrisati ta zapis?</string>
     <string name="text_view_message_text_1">Datum in čas</string>
+    <string name="text_view_given_cigarette">Ali je bila ta cigareta posojena?</string>
     <string name="button_confirm">Potrdi</string>
     <string name="button_close">Zapri</string>
 

@@ -35,8 +35,8 @@ public class Manager {
         sqLiteDatabase.execSQL(Queries.deleteRecord(id));
     }
 
-    public void update(Long id, String customDate) {
-        sqLiteDatabase.execSQL(Queries.updateRecord(id, customDate));
+    public void update(Long id, int isLent, String customDate) {
+        sqLiteDatabase.execSQL(Queries.updateRecord(id, isLent, customDate));
     }
 
     public Cursor fetchCurrentDate(String currentDate) {

@@ -24,12 +24,14 @@
 
     <!--fragment_dashboard_table -->
     <string name="text_view_full_date_text">DD.MM.YYYY HH:SS</string>
+    <string name="image_button_is_lent">Is lent?</string>
     <string name="image_button_edit_description">Edit record</string>
     <string name="delete_record_description">Delete record</string>
 
     <!--fragment_dashboard_popup -->
     <string name="text_view_message_text">Are you sure to delete this record?</string>
     <string name="text_view_message_text_1">Date and time</string>
+    <string name="text_view_given_cigarette">Was this cigarette lent?</string>
     <string name="button_confirm">Confirm</string>
     <string name="button_close">Close</string>
 

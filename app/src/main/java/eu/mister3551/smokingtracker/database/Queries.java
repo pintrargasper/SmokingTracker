@@ -14,6 +14,7 @@ public class Queries {
     public static String createHistory = String.format(
             "CREATE TABLE IF NOT EXISTS %1$s (" +
                     "id_%1$s INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "is_lent INTEGER NOT NULL CHECK (is_lent IN (0,1)), " +
                     "created_at TIMESTAMP NOT NULL);",
             Database.HISTORY_TABLE
     );
@@ -80,6 +81,7 @@ public class Queries {
     public static String fetchHistory(String currentDate) {
         return String.format(
                 "SELECT h.id_%1$s, " +
+                        "h.is_lent, " +
                         "strftime('%%H:%%M:%%S', h.created_at) AS created_at " +
                         "FROM %1$s h " +
                         "WHERE strftime('%%Y-%%m-%%d', h.created_at) = '%2$s' " +
@@ -97,7 +99,7 @@ public class Queries {
 
     public static String insertRecord(String createDate) {
         return String.format(
-                "INSERT INTO %1$s (created_at) VALUES (DATETIME('%2$s'));",
+                "INSERT INTO %1$s (created_at, is_lent) VALUES (DATETIME('%2$s'), 0);",
                 Database.HISTORY_TABLE,
                 createDate
         );
@@ -112,20 +114,22 @@ public class Queries {
         );
     }
 
-    public static String updateRecord(Long id, String customDate) {
+    public static String updateRecord(Long id, int isLent, String customDate) {
         return String.format(
                 "UPDATE %1$s " +
-                        "SET created_at = '%3$s' " +
-                        "WHERE id_%1$s = '%2$s';",
+                        "SET created_at = '%4$s', " +
+                        "is_lent = '%3$s' " +
+                        "WHERE id_%1$s = %2$s;",
                 Database.HISTORY_TABLE,
                 id,
+                isLent,
                 customDate
         );
     }
 
     public static String fetchById(Long id) {
         return String.format(
-                "SELECT h.created_at " +
+                "SELECT h.created_at, h.is_lent " +
                         "FROM %1$s h " +
                         "WHERE h.id_%1$s = '%2$s';",
                 Database.HISTORY_TABLE,

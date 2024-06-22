@@ -40,23 +40,26 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         History history = historyList.get(position);
         holder.text_view_full_date_text.setText(String.valueOf(history.date()));
 
-        holder.itemView.setOnClickListener(v -> {
+        holder.itemView.setOnClickListener(view -> {
             if (listener != null) {
                 listener.onItemClick(holder.itemView.getContext(), position);
             }
         });
 
-        holder.imageButtonEdit.setOnClickListener(v -> {
+        holder.imageButtonEdit.setOnClickListener(view -> {
             if (listener != null) {
                 listener.onEditClick(holder.imageButtonEdit.getContext(), history.id());
             }
         });
 
-        holder.imageButtonDelete.setOnClickListener(v -> {
+        holder.imageButtonDelete.setOnClickListener(view -> {
             if (listener != null) {
                 listener.onDeleteClick(holder.imageButtonDelete.getContext(), history.id());
             }
         });
+
+        holder.imageButtonIsLent.setEnabled(!history.isLent());
+        holder.imageButtonIsLent.setVisibility(history.isLent() ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -66,12 +69,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView text_view_full_date_text;
+        ImageButton imageButtonIsLent;
         ImageButton imageButtonEdit;
         ImageButton imageButtonDelete;
 
         ViewHolder(View itemView) {
             super(itemView);
             text_view_full_date_text = itemView.findViewById(R.id.text_view_full_date_text);
+            imageButtonIsLent = itemView.findViewById(R.id.image_button_is_lent);
             imageButtonEdit = itemView.findViewById(R.id.image_button_edit);
             imageButtonDelete = itemView.findViewById(R.id.image_button_delete);
         }
