@@ -66,12 +66,12 @@ public class Queries {
 
     public static String fetchAll(String currentDate) {
         return String.format("SELECT " +
-                "m.id_main, " +
-                "(strftime('%%s', 'now', 'localtime') - strftime('%%s', m.created_at)) AS time_passed, " +
-                "(SELECT COUNT(*) FROM %2$s h WHERE strftime('%%Y-%%d', datetime(h.created_at)) = strftime('%%Y-%%d', '%3$s')) AS daily, " +
-                "(SELECT COUNT(*) FROM %2$s h WHERE strftime('%%Y-%%W', datetime(h.created_at)) = strftime('%%Y-%%W', '%3$s')) AS weekly, " +
-                "(SELECT COUNT(*) FROM %2$s h WHERE strftime('%%Y-%%m', datetime(h.created_at)) = strftime('%%Y-%%m', '%3$s')) AS monthly " +
-                "FROM %1$s m;",
+                        "m.id_main, " +
+                        "(strftime('%%s', 'now', 'localtime') - strftime('%%s', m.created_at)) AS time_passed, " +
+                        "(SELECT COUNT(*) FROM %2$s h WHERE date(h.created_at) = date('%3$s')) AS daily, " +
+                        "(SELECT COUNT(*) FROM %2$s h WHERE strftime('%%Y-%%W', h.created_at) = strftime('%%Y-%%W', '%3$s')) AS weekly, " +
+                        "(SELECT COUNT(*) FROM %2$s h WHERE strftime('%%Y-%%m', h.created_at) = strftime('%%Y-%%m', '%3$s')) AS monthly " +
+                        "FROM %1$s m;",
                 Database.MAIN_TABLE,
                 Database.HISTORY_TABLE,
                 currentDate
